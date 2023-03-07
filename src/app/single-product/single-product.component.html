@@ -1,0 +1,14 @@
+<ng-container *ngIf="productState$ | async as productState">
+  <ng-container *ngIf="productState.status === 'LOADING'">
+    <p-progressSpinner></p-progressSpinner>
+  </ng-container>
+  <ng-container *ngIf="productState.status === 'SUCCESS'">
+    <ng-container *ngIf="productState.data">
+      <p>Product name: {{ productState.data.title }}</p>
+      <img [src]="productState.data.images[0]">
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="productState.status === 'ERROR'">
+    Error while loading data. Refresh page and try again.
+  </ng-container>
+</ng-container>

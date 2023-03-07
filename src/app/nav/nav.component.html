@@ -1,0 +1,49 @@
+<div class="first-row">
+  <form [formGroup]="searchForm" class="first-row__logo-and-searchbar">
+    <img src="/assets/images/logo.png" class="first-row__logo">
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input formControlName="productName" (blur)="onSearchFormBlur()" type="text" pInputText placeholder="Search products" class="first-row__searchbar"/>
+      <div *ngIf="searchProductState$ | async as searchResults" class="first-row__results-container">
+        <div *ngIf="searchResults.status === 'LOADING'" class="first-row__spinner-container">
+          <p-progressSpinner class="first-row__spinner"></p-progressSpinner>
+        </div>
+        <ul *ngIf="searchResults.status === 'SUCCESS' && searchResults.data!.products.length" [class.scroll]="" class="first-row__results">
+          <li *ngFor="let result of searchResults.data!.products" (click)="onSearchResultClick(result)" class="first-row__result">{{ result.title }}</li>
+        </ul>
+        <p *ngIf="searchResults.status === 'SUCCESS' && !searchResults.data!.products.length" class="first-row__no-data">
+          No products found.
+        </p>
+        <p *ngIf="searchResults.status === 'ERROR'" class="first-row__no-data">
+          Error. Try again later.
+        </p>
+      </div>
+    </span>
+  </form>
+
+  <div class="first-row__links">
+    <a class="first-row__link">
+      <i class="pi pi-user first-row__icon"></i>
+      <span>Log in</span>
+    </a>
+    <a class="first-row__link">
+      <i class="pi pi-shopping-cart first-row__icon"></i>
+      <span>Basket</span>
+    </a>
+  </div>
+</div>
+
+<div class="second-row">
+  <div *ngFor="let category of categories">
+    <div (mouseleave)="showSubcategory(null)">
+    <a
+      (mouseenter)="showSubcategory(category.id)"
+      [class.second-row__product--hovered]="category.id === visibleSubcategory"
+      class="second-row__product">{{ category.name }}
+    </a>
+    <div *ngIf="category.id === visibleSubcategory" class="second-row__subcategories">
+      <p *ngFor="let subcategory of category.subcategories">{{subcategory | titlecase}}</p>
+    </div>
+  </div>
+  </div>
+</div>
